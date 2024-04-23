@@ -1,0 +1,34 @@
+### GETALL
+GET http://localhost:3001/customer
+content-type: application/json
+
+
+### GET BY ID
+GET http://localhost:3001/customer/c64713a3-58ba-4a19-8561-c0423dd5c999
+content-type: application/json
+
+
+### CREATE
+POST http://localhost:3001/customer
+content-type: application/json
+
+{
+    "lastname": "sample",
+    "firstname": "ccc",
+    "email": "toto@example.com"
+}
+
+### UPDATE
+PUT http://localhost:3001/customer
+content-type: application/json
+
+{
+    "id":"031a5629-33a4-45b6-98c5-5782ac74b138",
+    "lastname": "sample",
+    "firstname": "tach",
+    "email": "toto@example.com"
+}
+
+### DELETE
+DELETE http://localhost:3001/customer/c64713a3-58ba-4a19-8561-c0423dd5c999
+content-type: application/json

@@ -1,0 +1,32 @@
+### GETALL
+GET http://localhost:3001/subscription
+content-type: application/json
+
+
+### GET BY ID
+GET http://localhost:3001/subscription/7aa23779-d801-4065-9114-04a52632adf9
+content-type: application/json
+
+
+### CREATE
+POST http://localhost:3001/subscription
+content-type: application/json
+
+{
+    "startDate": "2024-03-19",
+    "type": "quaterly"
+}
+
+### UPDATE
+PUT http://localhost:3001/subscription
+content-type: application/json
+
+{
+    "id":"7aa23779-d801-4065-9114-04a52632adf9",
+    "startDate": "2024-03-01",
+    "type": "quaterly"
+}
+
+### DELETE
+DELETE http://localhost:3001/subscription/7aa23779-d801-4065-9114-04a52632adf9
+content-type: application/json

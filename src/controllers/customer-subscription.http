@@ -1,0 +1,18 @@
+### GETALL
+GET http://localhost:3001/customer-subscription
+content-type: application/json
+
+
+### GET BY CUSTOMER ID
+GET http://localhost:3001/customer-subscription/customer/a5903aea-7a99-476b-8a99-98207714f662
+content-type: application/json
+
+
+### ADD CUSTOMER SUBSCRIPTION
+POST http://localhost:3001/customer-subscription
+content-type: application/json
+
+{
+    "customerId": "a5903aea-7a99-476b-8a99-98207714f662",
+    "subscriptionId": "797bbb56-3efc-412d-bd3b-322741ebf464"
+}
