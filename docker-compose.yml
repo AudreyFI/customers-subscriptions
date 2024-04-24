@@ -1,6 +1,7 @@
 services:
   db:
-    image: postgres:latest
+    build:
+      context: ./Dockerfile.dev
     restart: always
     ports:
       - 5432:5432
@@ -18,8 +19,7 @@ services:
 
   app:
     build:
-      context: .
-      target: development
+      context: ./Dockerfile.dev
     restart: unless-stopped
     ports:
       - 3001:3001

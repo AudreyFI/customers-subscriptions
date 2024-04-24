@@ -1,0 +1,11 @@
+FROM postgres:latest
+COPY /data /var/lib/postgresql/data
+EXPOSE 5432
+
+FROM node:alpine
+WORKDIR /app
+COPY package*.json .
+RUN npm install
+COPY . .
+EXPOSE 3001
+CMD ["npm", "run", "start"]

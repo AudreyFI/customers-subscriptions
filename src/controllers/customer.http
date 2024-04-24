@@ -30,5 +30,5 @@ content-type: application/json
 }
 
 ### DELETE
-DELETE http://localhost:3001/customer/c64713a3-58ba-4a19-8561-c0423dd5c999
+DELETE http://localhost:3001/customer/4d6ae0d0-d510-4781-9813-721469df8b53
 content-type: application/json

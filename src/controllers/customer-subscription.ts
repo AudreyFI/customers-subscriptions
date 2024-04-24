@@ -1,8 +1,5 @@
 import { Request, Response } from 'express'
-import { CustomerSubscription } from '../models/customer-subscription.model'
-import { Customer } from '../models/customer.model'
 import { CreateCustomerSubscriptionDto } from '../models/customer-subscription.dto'
-import { Subscription } from '../models/subscription.model'
 import { ValidationError as ClassValidationError } from 'class-validator'
 import { ValidationError } from 'sequelize'
 import { Inject, Service } from 'typedi'

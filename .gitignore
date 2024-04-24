@@ -23,6 +23,7 @@ node_modules/
 
 # Output of 'npm pack'
 *.tgz
+*.tar.gz
 
 # dotenv environment variables file
 .env
@@ -31,3 +32,5 @@ node_modules/
 todo.txt
 data
 dist
+docker-compose-db.yml
+docker-compose-api.yml
