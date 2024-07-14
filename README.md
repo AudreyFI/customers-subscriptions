@@ -13,7 +13,7 @@ The subscription state machine is tested with Jest.
 
 These 3 layers will be containerized (Docker) and deployed where you want.
 
-## Installation
+## Setup
 
 You'll need to install Docker to launch this project locally
 
@@ -21,6 +21,22 @@ You'll need to install Docker to launch this project locally
 docker compose build
 docker compose up
 ```
+
+Then fill in the .env.example file and rename it .env
+
+```bash
+POSTGRES_USER=CHANGEME
+POSTGRES_PASSWORD=CHANGEME
+POSTGRES_DB=CHANGEME
+HOST=CHANGEME
+APP_NAME=CHANGEME
+EMAIL_SENDER=CHANGEME
+SMTP_HOST=CHANGEME
+SMTP_USER=CHANGEME
+SMTP_PASSWORD=CHANGEME
+```
+
+I use mailtrap as an Email Delivery Platform https://mailtrap.io/
 
 ## Database backup and restore
 
