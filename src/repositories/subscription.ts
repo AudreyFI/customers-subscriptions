@@ -4,8 +4,8 @@ import {
   Subscription as SubscriptionInterface,
   UpdateSubscriptionDto,
 } from '../models/subscription.dto'
-import { Subscription } from '../models/subscription.model'
 import { Repository } from './repository.interface'
+import { subscription } from '../models/subscription.model'
 
 @Service()
 export class SubscriptionRepository
@@ -14,27 +14,27 @@ export class SubscriptionRepository
   async getAll() {
     // TODO : Add pagination
     // TODO : Add filtering
-    return (await Subscription.findAll()) as unknown as SubscriptionInterface[]
+    return (await subscription.findAll()) as unknown as SubscriptionInterface[]
   }
 
   async getByStartDateAndEndDate(startDate: string, endDate: string) {
-    return (await Subscription.findOne({
+    return (await subscription.findOne({
       where: { startDate, endDate },
     })) as unknown as SubscriptionInterface[]
   }
 
   async get(id: string) {
-    return (await Subscription.findByPk(id)) as unknown as SubscriptionInterface
+    return (await subscription.findByPk(id)) as unknown as SubscriptionInterface
   }
 
   async create(createSubscriptionDto: CreateSubscriptionDto) {
-    return (await Subscription.create(
+    return (await subscription.create(
       createSubscriptionDto as CreateSubscriptionDto,
     )) as unknown as SubscriptionInterface
   }
 
   async update(updateSubscriptionDto: UpdateSubscriptionDto) {
-    const existingSubscription = await Subscription.findByPk(
+    const existingSubscription = await subscription.findByPk(
       updateSubscriptionDto.id,
     )
     if (!existingSubscription) {
@@ -42,14 +42,14 @@ export class SubscriptionRepository
         `Subscription with id ${updateSubscriptionDto.id} not found`,
       )
     }
-    await Subscription.update(updateSubscriptionDto, {
+    await subscription.update(updateSubscriptionDto, {
       where: { id: updateSubscriptionDto.id },
     })
     return updateSubscriptionDto as unknown as SubscriptionInterface
   }
 
   async delete(id: string) {
-    return (await Subscription.destroy({
+    return (await subscription.destroy({
       where: { id },
     })) as unknown as SubscriptionInterface
   }

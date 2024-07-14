@@ -1,24 +1,29 @@
 import { DataTypes, ModelDefined } from 'sequelize'
 import { db } from '../database'
-import { Customer } from './customer.model'
-import { Subscription } from './subscription.model'
+import { customer } from './customer.model'
+import { subscription } from './subscription.model'
 import { CustomerSubscription as CustomerSubscriptionInterface } from '../models/customer-subscription.dto'
 
-export const CustomerSubscription: ModelDefined<
+export const customerSubscription: ModelDefined<
   CustomerSubscriptionInterface,
   Omit<CustomerSubscriptionInterface, 'id'>
-> = db.define('Customer_subscription', {
+> = db.define('customer_subscription', {
   paymentDate: {
     type: DataTypes.DATEONLY,
     allowNull: true,
   },
+  status: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 })
 
-Subscription.belongsToMany(Customer, {
-  through: 'Customer_subscription',
+subscription.belongsToMany(customer, {
+  through: 'customer_subscription',
   foreignKey: 'subscriptionId',
 })
-Customer.belongsToMany(Subscription, {
-  through: 'Customer_subscription',
+
+customer.belongsToMany(subscription, {
+  through: 'customer_subscription',
   foreignKey: 'customerId',
 })

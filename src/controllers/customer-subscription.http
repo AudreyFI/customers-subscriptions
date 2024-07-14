@@ -13,6 +13,11 @@ POST http://localhost:3001/customer-subscription
 content-type: application/json
 
 {
-    "customerId": "a5903aea-7a99-476b-8a99-98207714f662",
-    "subscriptionId": "797bbb56-3efc-412d-bd3b-322741ebf464"
+    "customerId": "2c05fdda-f466-4f5d-b773-7d836ac542d4",
+    "subscriptionId": "47db625a-0c8b-4775-8a19-1acca66f32f7"
 }
+
+
+### CHECK CUSTOMER SUBSCRIPTION VALIDITY
+GET http://localhost:3001/customer-subscription/check-validity
+content-type: application/json

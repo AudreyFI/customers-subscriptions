@@ -2,9 +2,7 @@ import 'reflect-metadata'
 import express from 'express'
 import routes from './routes'
 import { db } from './database'
-import { Customer } from './models/customer.model'
-import { Subscription } from './models/subscription.model'
-import { CustomerSubscription } from './models/customer-subscription.model'
+import { synchronizeModels } from './models/synchonization'
 
 const app = express()
 app.use(express.json())
@@ -15,13 +13,12 @@ const init = async () => {
     await db.authenticate()
     console.log('Database connected!')
 
-    await Customer.sync()
-    await Subscription.sync()
-    await CustomerSubscription.sync()
+    await synchronizeModels()
 
     app.listen(3001, () => {
       console.log('Server is running on port 3001')
       console.log(`*^!@4=> Process id: ${process.pid}`)
+      registerProcessEvents()
     })
   } catch (error) {
     console.log(error)
@@ -30,3 +27,26 @@ const init = async () => {
 }
 
 init()
+
+function registerProcessEvents() {
+  process.on('uncaughtException', (error: Error) => {
+    console.error('UncaughtException', error)
+  })
+
+  process.on('unhandledRejection', (reason, promise) => {
+    console.info(reason, promise)
+  })
+
+  process.on('SIGINT', async () => {
+    await gracefulShutdown()
+  })
+
+  process.on('SIGTERM', async () => {
+    await gracefulShutdown()
+  })
+}
+
+async function gracefulShutdown() {
+  console.info('Starting graceful shutdown')
+  process.exit(0)
+}

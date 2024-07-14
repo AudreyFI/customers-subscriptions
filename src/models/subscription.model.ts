@@ -2,10 +2,10 @@ import { DataTypes, ModelDefined } from 'sequelize'
 import { db } from '../database'
 import { Subscription as SubscriptionInterface } from './subscription.dto'
 
-export const Subscription: ModelDefined<
+export const subscription: ModelDefined<
   SubscriptionInterface,
   Omit<SubscriptionInterface, 'id'>
-> = db.define('Subscription', {
+> = db.define('subscription', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,

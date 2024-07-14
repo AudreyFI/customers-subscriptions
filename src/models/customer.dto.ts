@@ -5,7 +5,7 @@ export interface Customer {
   id?: string
   lastname?: string | undefined
   firstname: string
-  email?: string | undefined
+  email: string
 }
 
 export class UpdateCustomerDto implements Customer {
@@ -21,7 +21,7 @@ export class UpdateCustomerDto implements Customer {
   firstname!: string
 
   @IsString()
-  email?: string
+  email!: string
 
   static fromRequest(body: unknown): Customer {
     return transform(this, body)
@@ -41,7 +41,7 @@ export class CreateCustomerDto implements Customer {
   firstname!: string
 
   @IsString()
-  email?: string
+  email!: string
 
   static fromRequest(body: unknown): Customer {
     return transform(this, body)

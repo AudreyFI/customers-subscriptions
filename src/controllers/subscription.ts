@@ -1,5 +1,4 @@
 import { Request, Response } from 'express'
-import { Subscription } from '../models/subscription.model'
 import {
   CreateSubscriptionDto,
   UpdateSubscriptionDto,
@@ -9,6 +8,7 @@ import { Inject, Service } from 'typedi'
 import { SubscriptionRepository } from '../repositories/subscription'
 import { ValidationError as ClassValidationError } from 'class-validator'
 import { ValidationError } from 'sequelize'
+import { subscription } from '../models/subscription.model'
 
 @Service()
 export class SubscriptionController {
@@ -85,7 +85,7 @@ export class SubscriptionController {
       })
     }
 
-    const existingSubscription = await Subscription.findByPk(req.body.id)
+    const existingSubscription = await subscription.findByPk(req.body.id)
     if (!existingSubscription) {
       res
         .status(404)
@@ -94,7 +94,7 @@ export class SubscriptionController {
 
     req.body.endDate = convertPeriodToEndDate(req.body.startDate, req.body.type)
     // Check if there's already a combo startDate/endDate
-    const existingSubscriptionByDates = await Subscription.findOne({
+    const existingSubscriptionByDates = await subscription.findOne({
       where: { startDate: req.body.startDate, endDate: req.body.endDate },
     })
     if (existingSubscriptionByDates) {

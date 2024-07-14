@@ -3,6 +3,10 @@ import { CustomerController } from './controllers/customer'
 import { CustomerSubscriptionController } from './controllers/customer-subscription'
 import { SubscriptionController } from './controllers/subscription'
 import Container from 'typedi'
+import {
+  processState,
+  shouldTriggerProcess,
+} from './domain/customer-subscription/subscription-state'
 
 const customerController = Container.get(CustomerController)
 const subscriptionController = Container.get(SubscriptionController)
@@ -37,6 +41,7 @@ routes
 routes
   .route('/subscription')
   .post(subscriptionController.create.bind(subscriptionController))
+
 routes
   .route('/subscription')
   .put(subscriptionController.update.bind(subscriptionController))
@@ -61,6 +66,15 @@ routes
   .post(
     customerSubscriptionController.addSubscription.bind(
       customerSubscriptionController,
+    ),
+  )
+routes
+  .route('/ ')
+  .get(
+    customerSubscriptionController.checkSubscriptionValidity.bind(
+      customerSubscriptionController,
+      processState,
+      shouldTriggerProcess,
     ),
   )
 

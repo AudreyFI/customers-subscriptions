@@ -1,5 +1,32 @@
-For development launch this command : `docker compose up`
+## Description
 
-- Build API images :
-  `docker build -f Dockerfile.prod . -t customers-subscriptions`
-  `docker build -f Dockerfile.db . -t postgres`
+This project is used to maintain customer's subscriptions and notify them when their subscription expires (15 days, the exact day and 15 days after). This project provides also a frontend application to manage the customers and subscriptions.
+
+Docker, Node.js, Express, Sequelize and React.js as the main technologies.
+The subscription state machine is tested with Jest.
+
+## Architecture
+
+- A Postgres Database that contains 4 tables : customer, subscription, customer_subscription and user
+- An Express api that will be accessed by a frontend application and by a cron job to manage the validity of the subscriptions (changing status and sending notifications to the customers)
+- A frontend application in React to manage the customers and display the subscriptions status to the administrator
+
+These 3 layers will be containerized (Docker) and deployed via Github Actions to an EC2.
+
+We'll use a dns and a reverse proxy to acces the frontend via HTTPS.
+
+## Installation
+
+You'll need to install Docker to launch this project locally
+
+```bash
+docker compose build
+docker compose up
+```
+
+## Build
+
+```bash
+docker build -f Dockerfile.prod . -t customers-subscriptions
+docker build -f Dockerfile.db . -t postgres
+```

@@ -1,7 +1,7 @@
 services:
   db:
     build:
-      context: ./Dockerfile.dev
+      dockerfile: ./Dockerfile.db
     restart: always
     ports:
       - 5432:5432
@@ -19,7 +19,7 @@ services:
 
   app:
     build:
-      context: ./Dockerfile.dev
+      dockerfile: ./Dockerfile.dev
     restart: unless-stopped
     ports:
       - 3001:3001
