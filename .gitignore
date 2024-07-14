@@ -35,3 +35,4 @@ dist
 docker-compose-db.yml
 docker-compose-api.yml
 backup
+Dockerfile.test-prod
