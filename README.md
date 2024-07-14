@@ -11,9 +11,7 @@ The subscription state machine is tested with Jest.
 - An Express api that will be accessed by a frontend application and by a cron job to manage the validity of the subscriptions (changing status and sending notifications to the customers)
 - A frontend application in React to manage the customers and display the subscriptions status to the administrator
 
-These 3 layers will be containerized (Docker) and deployed via Github Actions to an EC2.
-
-We'll use a dns and a reverse proxy to acces the frontend via HTTPS.
+These 3 layers will be containerized (Docker) and deployed where you want.
 
 ## Installation
 
@@ -22,13 +20,6 @@ You'll need to install Docker to launch this project locally
 ```bash
 docker compose build
 docker compose up
-```
-
-## Build
-
-```bash
-docker build -f Dockerfile.prod . -t customers-subscriptions
-docker build -f Dockerfile.db . -t postgres
 ```
 
 ## Database backup and restore
