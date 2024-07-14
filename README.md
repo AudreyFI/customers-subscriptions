@@ -30,3 +30,12 @@ docker compose up
 docker build -f Dockerfile.prod . -t customers-subscriptions
 docker build -f Dockerfile.db . -t postgres
 ```
+
+## Database backup and restore
+
+A docker container named `backup` is doing backups everydays and writes a file here /backup/dump.sql. To restore the database :
+
+```bash
+docker cp backup/2024-07-14-15-03-39.dump db:test.dump
+docker exec -it db bash -c 'pg_restore -c --user <USER> --dbname <DBNAME> /test.dump'
+```

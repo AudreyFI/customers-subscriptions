@@ -17,6 +17,24 @@ services:
     ports:
       - 8080:8080
 
+  backup:
+    image: postgres:16.3-bullseye
+    restart: unless-stopped
+    container_name: backup
+    depends_on:
+      - db
+    volumes:
+      - ./backup:/backup
+    command: >
+      bash -c "while true; do
+        PGPASSWORD=$$POSTGRES_PASSWORD pg_dump -h db -U $$POSTGRES_USER -Fc $$POSTGRES_DB > /backup/$$(date +%Y-%m-%d-%H-%M-%S).dump
+        echo ""Backup done at $$(date +%Y-%m-%d_%H:%M:%S)""
+        ls -1 /backup/*.dump | head -n -2 | xargs rm -f
+        sleep 86400
+      done"
+    env_file:
+      - .env
+
   app:
     build:
       dockerfile: ./Dockerfile.dev
