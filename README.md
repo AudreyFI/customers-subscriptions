@@ -1,17 +1,16 @@
 ## Description
 
-This project is used to maintain customer's subscriptions and notify them when their subscription expires (15 days, the exact day and 15 days after). This project provides also a frontend application to manage the customers and subscriptions.
+This project is used to maintain customer's subscriptions and notify them when their subscription expires (15 days, the exact day and 15 days after).
 
-Docker, Node.js, Express, Sequelize and React.js as the main technologies.
+Docker, Node.js, Express, Sequelize as the main technologies.
 The subscription state machine is tested with Jest.
 
 ## Architecture
 
-- A Postgres Database that contains 4 tables : customer, subscription, customer_subscription and user
-- An Express api that will be accessed by a frontend application and by a cron job to manage the validity of the subscriptions (changing status and sending notifications to the customers)
-- A frontend application in React to manage the customers and display the subscriptions status to the administrator
+- A Postgres Database that contains 3 tables : customer, subscription, customer_subscription
+- An Express api that will be accessed by a frontend application (another repo will be added for this soon) and by a cron job to manage the validity of the subscriptions (changing status and sending notifications to the customers)
 
-These 3 layers will be containerized (Docker) and deployed where you want.
+These layers will be containerized (Docker).
 
 ## Setup
 
