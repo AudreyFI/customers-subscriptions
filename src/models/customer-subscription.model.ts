@@ -16,6 +16,10 @@ export const customerSubscription: ModelDefined<
     type: DataTypes.STRING,
     allowNull: false,
   },
+  amount: {
+    type: DataTypes.DECIMAL,
+    allowNull: true,
+  },
 })
 
 subscription.belongsToMany(customer, {
