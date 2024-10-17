@@ -17,6 +17,8 @@ These layers will be containerized (Docker).
 You'll need to install Docker to launch this project locally
 
 ```bash
+mkdir data
+sudo chmod -R 777 data
 docker compose build
 docker compose up
 ```
