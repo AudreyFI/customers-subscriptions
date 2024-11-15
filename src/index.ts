@@ -1,10 +1,12 @@
 import 'reflect-metadata'
+import cors from 'cors'
 import express from 'express'
 import routes from './routes'
 import { db } from './database'
 import { synchronizeModels } from './models/synchonization'
 
 const app = express()
+app.use(cors({ origin: 'http://localhost:5173' }))
 app.use(express.json())
 app.use('/', routes)
 
