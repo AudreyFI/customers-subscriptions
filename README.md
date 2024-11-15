@@ -18,7 +18,7 @@ You'll need to install Docker to launch this project locally
 
 ```bash
 mkdir data
-sudo chmod -R 777 data
+sudo chown $USER data
 docker compose build
 docker compose up
 ```

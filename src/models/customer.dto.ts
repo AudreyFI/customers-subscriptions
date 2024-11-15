@@ -1,11 +1,13 @@
 import { IsNotEmpty, IsString, IsUUID, ValidationError } from 'class-validator'
 import { transform, hasErrors } from '../core/validator'
+import { Subscription } from './subscription.dto'
 
 export interface Customer {
   id?: string
   lastname?: string | undefined
   firstname: string
   email: string
+  subscriptions?: Subscription[]
 }
 
 export class UpdateCustomerDto implements Customer {

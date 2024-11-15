@@ -6,17 +6,40 @@ import {
 } from '../models/customer.dto'
 import { Repository } from './repository.interface'
 import { customer } from '../models/customer.model'
+import { subscription } from '../models/subscription.model'
 
 @Service()
 export class CustomerRepository implements Repository<CustomerInterface> {
   async getAll() {
     // TODO : Add pagination
     // TODO : Add filtering
-    return (await customer.findAll()) as unknown as CustomerInterface[]
+    return (await customer.findAll({
+      attributes: ['id', 'firstname', 'lastname', 'email'],
+      include: [
+        {
+          model: subscription,
+          attributes: ['id', 'startDate', 'endDate'],
+          through: {
+            attributes: ['paymentDate', 'status', 'amount'],
+          },
+        },
+      ],
+    })) as unknown as CustomerInterface[]
   }
 
   async get(id: string) {
-    return (await customer.findByPk(id)) as unknown as CustomerInterface
+    return (await customer.findByPk(id, {
+      attributes: ['id', 'firstname', 'lastname', 'email'],
+      include: [
+        {
+          model: subscription,
+          attributes: ['id', 'startDate', 'endDate'],
+          through: {
+            attributes: ['paymentDate', 'status', 'amount'],
+          },
+        },
+      ],
+    })) as unknown as CustomerInterface
   }
 
   async create(createCustomerDto: CreateCustomerDto) {
