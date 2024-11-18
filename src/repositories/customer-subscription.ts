@@ -1,18 +1,19 @@
-import { Service } from 'typedi'
-import {
-  CustomerSubscriptionDto,
-  CustomerSubscription as CustomerSubscriptionInterface,
-} from '../models/customer-subscription.dto'
-import { customerSubscription } from '../models/customer-subscription.model'
-import { Repository } from './repository.interface'
 import { Op } from 'sequelize'
+import { Service } from 'typedi'
 import {
   CustomerSubscriptionDataModel,
   InvalidCustomerSubscription,
 } from '../domain/customer-subscription/customer-subscription-data'
+import { SubscriptionStatus } from '../domain/customer-subscription/subscription-state'
+import {
+  CreateCustomerSubscriptionDto,
+  CustomerSubscriptionDto,
+  CustomerSubscription as CustomerSubscriptionInterface,
+} from '../models/customer-subscription.dto'
+import { customerSubscription } from '../models/customer-subscription.model'
 import { customer } from '../models/customer.model'
 import { subscription } from '../models/subscription.model'
-import { SubscriptionStatus } from '../domain/customer-subscription/subscription-state'
+import { Repository } from './repository.interface'
 
 @Service()
 export class CustomerSubscriptionRepository
@@ -32,13 +33,25 @@ export class CustomerSubscriptionRepository
     })
   }
 
+  async getByCustomerAndSubscription(
+    customerId: string,
+    subscriptionId: string,
+  ) {
+    return (await customerSubscription.findAll({
+      where: {
+        customerId,
+        subscriptionId,
+      },
+    })) as unknown as CustomerSubscriptionInterface[]
+  }
+
   async get(): Promise<never> {
     throw new Error('Method not implemented.')
   }
 
-  async create(createCustomerSubscriptionDto: CustomerSubscriptionDto) {
+  async create(createCustomerSubscriptionDto: CreateCustomerSubscriptionDto) {
     return (await customerSubscription.create(
-      createCustomerSubscriptionDto as CustomerSubscriptionDto,
+      createCustomerSubscriptionDto as CreateCustomerSubscriptionDto,
     )) as unknown as CustomerSubscriptionInterface
   }
 
@@ -63,6 +76,12 @@ export class CustomerSubscriptionRepository
 
   async delete(): Promise<never> {
     throw new Error('Method not implemented.')
+  }
+
+  async deleteCustomerSubscription(customerId: string, subscriptionId: string) {
+    return (await customerSubscription.destroy({
+      where: { customerId, subscriptionId },
+    })) as unknown as CustomerSubscriptionInterface
   }
 
   async getInvalidSubscriptions(

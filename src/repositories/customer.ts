@@ -4,16 +4,17 @@ import {
   Customer as CustomerInterface,
   UpdateCustomerDto,
 } from '../models/customer.dto'
-import { Repository } from './repository.interface'
 import { customer } from '../models/customer.model'
+import { Subscription } from '../models/subscription.dto'
 import { subscription } from '../models/subscription.model'
+import { Repository } from './repository.interface'
 
 @Service()
 export class CustomerRepository implements Repository<CustomerInterface> {
   async getAll() {
     // TODO : Add pagination
     // TODO : Add filtering
-    return (await customer.findAll({
+    const customers = (await customer.findAll({
       attributes: ['id', 'firstname', 'lastname', 'email'],
       include: [
         {
@@ -21,10 +22,33 @@ export class CustomerRepository implements Repository<CustomerInterface> {
           attributes: ['id', 'startDate', 'endDate'],
           through: {
             attributes: ['paymentDate', 'status', 'amount'],
+            as: 'customerSubscription',
           },
         },
       ],
     })) as unknown as CustomerInterface[]
+    const mappedCustomers = customers.map((customer) => {
+      const subscriptions = customer.subscriptions as Subscription[]
+      const mappedSubscriptions = subscriptions.map((subscription) => {
+        return {
+          id: subscription.id,
+          startDate: subscription.startDate,
+          endDate: subscription.endDate,
+          paymentDate: subscription.customerSubscription?.paymentDate,
+          status: subscription.customerSubscription?.status,
+          amount: subscription.customerSubscription?.amount,
+        }
+      })
+      return {
+        id: customer.id,
+        firstname: customer.firstname,
+        lastname: customer.lastname,
+        email: customer.email,
+        subscriptions: mappedSubscriptions,
+      }
+    })
+
+    return mappedCustomers
   }
 
   async get(id: string) {
@@ -36,6 +60,7 @@ export class CustomerRepository implements Repository<CustomerInterface> {
           attributes: ['id', 'startDate', 'endDate'],
           through: {
             attributes: ['paymentDate', 'status', 'amount'],
+            as: 'customerSubscription',
           },
         },
       ],

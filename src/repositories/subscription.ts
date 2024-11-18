@@ -1,11 +1,10 @@
 import { Service } from 'typedi'
 import {
-  CreateSubscriptionDto,
+  SubscriptionDto,
   Subscription as SubscriptionInterface,
-  UpdateSubscriptionDto,
 } from '../models/subscription.dto'
-import { Repository } from './repository.interface'
 import { subscription } from '../models/subscription.model'
+import { Repository } from './repository.interface'
 
 @Service()
 export class SubscriptionRepository
@@ -20,32 +19,21 @@ export class SubscriptionRepository
   async getByStartDateAndEndDate(startDate: string, endDate: string) {
     return (await subscription.findOne({
       where: { startDate, endDate },
-    })) as unknown as SubscriptionInterface[]
+    })) as unknown as SubscriptionInterface
   }
 
   async get(id: string) {
     return (await subscription.findByPk(id)) as unknown as SubscriptionInterface
   }
 
-  async create(createSubscriptionDto: CreateSubscriptionDto) {
+  async create(createSubscriptionDto: SubscriptionDto) {
     return (await subscription.create(
-      createSubscriptionDto as CreateSubscriptionDto,
+      createSubscriptionDto as SubscriptionDto,
     )) as unknown as SubscriptionInterface
   }
 
-  async update(updateSubscriptionDto: UpdateSubscriptionDto) {
-    const existingSubscription = await subscription.findByPk(
-      updateSubscriptionDto.id,
-    )
-    if (!existingSubscription) {
-      throw new Error(
-        `Subscription with id ${updateSubscriptionDto.id} not found`,
-      )
-    }
-    await subscription.update(updateSubscriptionDto, {
-      where: { id: updateSubscriptionDto.id },
-    })
-    return updateSubscriptionDto as unknown as SubscriptionInterface
+  async update(): Promise<never> {
+    throw new Error('Method not implemented.')
   }
 
   async delete(id: string) {

@@ -4,7 +4,7 @@ content-type: application/json
 
 
 ### GET BY CUSTOMER ID
-GET http://localhost:3001/customer-subscription/customer/a5903aea-7a99-476b-8a99-98207714f662
+GET http://localhost:3001/customer-subscription/customer/2c05fdda-f466-4f5d-b773-7d836ac542d4
 content-type: application/json
 
 
@@ -14,8 +14,25 @@ content-type: application/json
 
 {
     "customerId": "2c05fdda-f466-4f5d-b773-7d836ac542d4",
-    "subscriptionId": "47db625a-0c8b-4775-8a19-1acca66f32f7"
+    "startDate": "2024-10-01",
+    "endDate": "2024-12-31"
 }
+
+
+### UPDATE CUSTOMER SUBSCRIPTION (PAY)
+PUT http://localhost:3001/customer-subscription
+content-type: application/json
+
+{
+    "customerId": "2c05fdda-f466-4f5d-b773-7d836ac542d4",
+    "subscriptionId" : "47db625a-0c8b-4775-8a19-1acca66f32f7",
+    "paymentDate": "2024-11-01",
+    "amount": 33
+}
+
+### DELETE CUSTOMER SUBSCRIPTION
+DELETE http://localhost:3001/customer-subscription/?customerId=2c05fdda-f466-4f5d-b773-7d836ac542d4&subscriptionId=88187431-3e87-4431-a9f2-616bcdb6360a
+content-type: application/json
 
 
 ### CHECK CUSTOMER SUBSCRIPTION VALIDITY

@@ -1,8 +1,8 @@
 import { Router } from 'express'
+import Container from 'typedi'
 import { CustomerController } from './controllers/customer'
 import { CustomerSubscriptionController } from './controllers/customer-subscription'
 import { SubscriptionController } from './controllers/subscription'
-import Container from 'typedi'
 import {
   processState,
   shouldTriggerProcess,
@@ -43,9 +43,6 @@ routes
   .post(subscriptionController.create.bind(subscriptionController))
 
 routes
-  .route('/subscription')
-  .put(subscriptionController.update.bind(subscriptionController))
-routes
   .route('/subscription/:id')
   .delete(subscriptionController.delete.bind(subscriptionController))
 
@@ -69,7 +66,21 @@ routes
     ),
   )
 routes
-  .route('/ ')
+  .route('/customer-subscription')
+  .put(
+    customerSubscriptionController.updateSubscription.bind(
+      customerSubscriptionController,
+    ),
+  )
+routes
+  .route('/customer-subscription')
+  .delete(
+    customerSubscriptionController.deleteSubscription.bind(
+      customerSubscriptionController,
+    ),
+  )
+routes
+  .route('/customer-subscription/check-validity')
   .get(
     customerSubscriptionController.checkSubscriptionValidity.bind(
       customerSubscriptionController,

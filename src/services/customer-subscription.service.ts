@@ -1,11 +1,11 @@
 import { Inject, Service } from 'typedi'
-import { CustomerSubscriptionRepository } from '../repositories/customer-subscription'
-import { NodemailerLibrary } from '../email/nodemailer'
-import { EmailTemplate } from '../email/email-library.interface'
 import { InvalidCustomerSubscription } from '../domain/customer-subscription/customer-subscription-data'
 import { SubscriptionStatus } from '../domain/customer-subscription/subscription-state'
+import { EmailTemplate } from '../email/email-library.interface'
+import { NodemailerLibrary } from '../email/nodemailer'
 import { EmailParam } from '../email/templates/email-param'
-import { CustomerSubscription } from '../models/customer-subscription.dto'
+import { CustomerSubscriptionDto } from '../models/customer-subscription.dto'
+import { CustomerSubscriptionRepository } from '../repositories/customer-subscription'
 
 @Service()
 export class CustomerSubscriptionService {
@@ -95,8 +95,8 @@ export class CustomerSubscriptionService {
         `NextState not found for the given subscriptionId ${invalidSubscription.subscription.id} and customerId ${invalidSubscription.customerId}`,
       )
     }
-    const customerSubscription: CustomerSubscription = {
-      customerId: invalidSubscription.customerId as string,
+    const customerSubscription: CustomerSubscriptionDto = {
+      customerId: invalidSubscription.customerId,
       subscriptionId: invalidSubscription.subscription.id,
       status: nextState,
     }

@@ -13,12 +13,13 @@ export const customer: ModelDefined<
   },
   lastname: {
     type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
+    unique: 'firstname_lastname',
   },
   firstname: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
+    unique: 'firstname_lastname',
   },
   email: {
     type: DataTypes.STRING,

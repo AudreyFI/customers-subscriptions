@@ -1,57 +1,35 @@
 import {
   IsDateString,
-  IsEnum,
   IsNotEmpty,
+  IsOptional,
   IsString,
-  IsUUID,
   ValidationError,
 } from 'class-validator'
-import { transform, hasErrors } from '../core/validator'
+import { hasErrors, transform } from '../core/validator'
+import { CustomerSubscription } from './customer-subscription.dto'
 
 export interface Subscription {
   id?: string
-  startDate?: string | undefined
-  endDate?: string | undefined
-  type: SubscriptionType
+  startDate: string
+  endDate: string
+  paymentDate?: string
+  status?: string
+  amount?: number
+  customerSubscription?: CustomerSubscription
 }
 
-export enum SubscriptionType {
-  QUARTERLY = 'quaterly',
-  YEARLY = 'yearly',
-}
-
-export class UpdateSubscriptionDto implements Subscription {
+export class SubscriptionDto implements Subscription {
+  @IsOptional()
   @IsString()
-  @IsUUID()
-  id!: string
+  id?: string
 
   @IsNotEmpty()
   @IsDateString()
-  startDate?: string
+  startDate!: string
 
   @IsNotEmpty()
-  @IsEnum(SubscriptionType)
-  type!: SubscriptionType
-
-  static fromRequest(body: unknown): Subscription {
-    return transform(this, body)
-  }
-
-  static async hasErrors(
-    body: Subscription,
-  ): Promise<ValidationError[] | null> {
-    return await hasErrors(body)
-  }
-}
-
-export class CreateSubscriptionDto implements Subscription {
   @IsDateString()
-  @IsNotEmpty()
-  startDate?: string
-
-  @IsNotEmpty()
-  @IsEnum(SubscriptionType)
-  type!: SubscriptionType
+  endDate!: string
 
   static fromRequest(body: unknown): Subscription {
     return transform(this, body)

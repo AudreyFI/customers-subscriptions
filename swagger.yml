@@ -92,20 +92,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Subscription'
-    put:
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Subscription'
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Subscription'
   /subscription/{id}:
     get:
       parameters:
@@ -154,8 +140,22 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Customer'
-  /customer-subscription/{customeriId}:
+                $ref: '#/components/schemas/CustomerSubscription'
+    put:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerSubscriptions'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerSubscription'
+  /customer-subscription/{customerId}:
     get:
       parameters:
         - name: customeriId
@@ -172,14 +172,34 @@ paths:
                 $ref: '#/components/schemas/CustomerSubscription'
     delete:
       parameters:
-        - name: id
-          in: path
+        - name: customerId
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: subscriptionId
+          in: query
           required: true
           schema:
             type: string
       responses:
         '204':
           description: No Content
+  /custtomer-subscription/check-validity:
+    get:
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  valid:
+                    type: boolean
+                required:
+                  - valid
+
 components:
   schemas:
     Customers:
@@ -251,8 +271,9 @@ components:
           type: string
         updatedAt:
           type: string
-        subscriptionId:
-          type: string
+        subscription:
+          type: object
+          $ref: '#/components/schemas/Subscription'
         customerId:
           type: string
       additionalProperties: false

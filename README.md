@@ -18,9 +18,10 @@ You'll need to install Docker to launch this project locally
 
 ```bash
 mkdir data
+sudo rm -r data/*
 sudo chown $USER data
 docker compose build
-docker compose up
+docker compose up -d
 ```
 
 Then fill in the .env.example file and rename it .env
