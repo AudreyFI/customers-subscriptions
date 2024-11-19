@@ -3,12 +3,13 @@
 This project is used to maintain customer's subscriptions and notify them when their subscription expires (15 days, the exact day and 15 days after).
 
 Docker, Node.js, Express, Sequelize as the main technologies.
-The subscription state machine is tested with Jest.
+
+The subscription's state machine is tested with Jest.
 
 ## Architecture
 
 - A Postgres Database that contains 3 tables : customer, subscription, customer_subscription
-- An Express api that will be accessed by a frontend application (another repo will be added for this soon) and by a cron job to manage the validity of the subscriptions (changing status and sending notifications to the customers)
+- An Express api that will be accessed by a frontend application ([coach-admin](https://github.com/AudreyFI/coach-admin)) and by a cron job to manage the validity of the subscriptions (changing status and sending notifications to the customers)
 
 These layers will be containerized (Docker).
 
@@ -42,7 +43,7 @@ I use mailtrap as an Email Delivery Platform https://mailtrap.io/
 
 ## Database backup and restore
 
-A docker container named `backup` is doing backups everydays and writes a file here /backup/dump.sql. To restore the database :
+A docker container named `backup` is doing backups everydays and writes a file here /backup/dump.sql. To restore the database (with the correct dump name) :
 
 ```bash
 docker cp backup/2024-07-14-15-03-39.dump db:test.dump
