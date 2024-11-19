@@ -4,7 +4,7 @@ import { SubscriptionStatus } from '../domain/customer-subscription/subscription
 import { EmailTemplate } from '../email/email-library.interface'
 import { NodemailerLibrary } from '../email/nodemailer'
 import { EmailParam } from '../email/templates/email-param'
-import { CustomerSubscriptionDto } from '../models/customer-subscription.dto'
+import { UpdateCustomerSubscriptionDto } from '../models/customer-subscription.dto'
 import { CustomerSubscriptionRepository } from '../repositories/customer-subscription'
 
 @Service()
@@ -95,11 +95,11 @@ export class CustomerSubscriptionService {
         `NextState not found for the given subscriptionId ${invalidSubscription.subscription.id} and customerId ${invalidSubscription.customerId}`,
       )
     }
-    const customerSubscription: CustomerSubscriptionDto = {
+    const updateCustomerSubscription: UpdateCustomerSubscriptionDto = {
       customerId: invalidSubscription.customerId,
       subscriptionId: invalidSubscription.subscription.id,
       status: nextState,
     }
-    return this.repository.update(customerSubscription)
+    return this.repository.update(updateCustomerSubscription)
   }
 }

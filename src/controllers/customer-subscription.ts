@@ -8,8 +8,7 @@ import { EmailParam } from '../email/templates/email-param'
 import { date15daysAfter, date15daysBefore } from '../helpers/date'
 import {
   CreateCustomerSubscriptionDto,
-  CustomerSubscriptionDto,
-  CustomerSubscription as CustomerSubscriptionInterface,
+  UpdateCustomerSubscriptionDto,
 } from '../models/customer-subscription.dto'
 import { CustomerRepository } from '../repositories/customer'
 import { CustomerSubscriptionRepository } from '../repositories/customer-subscription'
@@ -37,115 +36,107 @@ export class CustomerSubscriptionController {
     const customer = await this.customerRepository.get(customerId)
 
     if (!customer) {
-      res.status(404).send({
+      return res.status(404).send({
         type: 'Not found',
         message: `Customer with id ${customerId} not found`,
       })
-    } else {
-      const customerSubscriptions =
-        await this.repository.getAllByCustomer(customerId)
-      res.status(200).send(customerSubscriptions)
     }
+    const customerSubscriptions =
+      await this.repository.getAllByCustomer(customerId)
+    res.status(200).send(customerSubscriptions)
   }
 
   async addSubscription(req: Request, res: Response) {
     const createCustomerSubscriptionDto: CreateCustomerSubscriptionDto =
       CreateCustomerSubscriptionDto.fromRequest(req.body)
-
     const hasErrors: ClassValidationError[] | null =
       await CreateCustomerSubscriptionDto.hasErrors(
         createCustomerSubscriptionDto,
       )
 
     if (hasErrors instanceof Array && hasErrors.length > 0) {
-      res.status(400).send({
+      return res.status(400).send({
         type: 'Invalid attribute(s)',
         message: ` ${(hasErrors as ClassValidationError[]).map((e) => e.property)}`,
       })
-    } else {
-      const customer = await this.customerRepository.get(
-        createCustomerSubscriptionDto.customerId,
+    }
+    // Check if customer exists else throw an error
+    const customer = await this.customerRepository.get(
+      createCustomerSubscriptionDto.customerId,
+    )
+    if (!customer) {
+      return res.status(404).send({
+        type: 'Not found',
+        message: `Customer with id ${createCustomerSubscriptionDto.customerId} not found`,
+      })
+    }
+    // Check if there's already a subscription with startDate/endDate or create it
+    let subscription =
+      await this.subscriptionRepository.getByStartDateAndEndDate(
+        createCustomerSubscriptionDto.startDate,
+        createCustomerSubscriptionDto.endDate,
       )
-      if (!customer) {
-        res.status(404).send({
-          type: 'Not found',
-          message: `Customer with id ${createCustomerSubscriptionDto.customerId} not found`,
+
+    if (subscription) {
+      const customerSubscriptions =
+        await this.repository.getByCustomerAndSubscription(
+          createCustomerSubscriptionDto.customerId,
+          subscription.id as string,
+        )
+      // If it is associated to the same customer we should return an error
+      if (customerSubscriptions?.[0]) {
+        return res.status(409).send({
+          type: 'Invalid attribute(s)',
+          message: `Subscription with start date ${createCustomerSubscriptionDto.startDate} and end date ${createCustomerSubscriptionDto.endDate} already exists for customer ${createCustomerSubscriptionDto.customerId}`,
         })
-      } else {
-        // Check if there's already a subscription with startDate/endDate or create it
-        // If it is associated to the same customer we should return an error
-        let subscription =
-          await this.subscriptionRepository.getByStartDateAndEndDate(
-            createCustomerSubscriptionDto.startDate,
-            createCustomerSubscriptionDto.endDate,
-          )
-        console.log(`subscription: ${JSON.stringify(subscription)}`)
-
-        let customerSubscription:
-          | CustomerSubscriptionInterface
-          | CreateCustomerSubscriptionDto
-        if (subscription) {
-          const customerSubscriptions =
-            await this.repository.getByCustomerAndSubscription(
-              createCustomerSubscriptionDto.customerId,
-              subscription.id as string,
-            )
-          customerSubscription = customerSubscriptions?.[0]
-          if (customerSubscription) {
-            res.status(409).send({
-              type: 'Invalid attribute(s)',
-              message: `Subscription with start date ${createCustomerSubscriptionDto.startDate} and end date ${createCustomerSubscriptionDto.endDate} already exists for customer ${createCustomerSubscriptionDto.customerId}`,
-            })
-            return
-          }
-        } else {
-          subscription = await this.subscriptionRepository.create({
-            startDate: createCustomerSubscriptionDto.startDate,
-            endDate: createCustomerSubscriptionDto.endDate,
-          })
-        }
-        try {
-          customerSubscription = {
-            ...createCustomerSubscriptionDto,
-            subscriptionId: subscription.id as string,
-          }
-
-          const newCustomerSubscription = await this.repository.create(
-            customerSubscription as CreateCustomerSubscriptionDto,
-          )
-          res.status(201).send(newCustomerSubscription)
-        } catch (error: ValidationError | unknown) {
-          res.status(400).send({
-            type: 'Validation error',
-            message: `${(error as ValidationError).errors?.[0]?.message}`,
-          })
-        }
       }
+    } else {
+      subscription = await this.subscriptionRepository.create({
+        startDate: createCustomerSubscriptionDto.startDate,
+        endDate: createCustomerSubscriptionDto.endDate,
+      })
+    }
+
+    try {
+      const customerSubscription = {
+        ...createCustomerSubscriptionDto,
+        subscriptionId: subscription.id as string,
+      }
+      const newCustomerSubscription = await this.repository.create(
+        customerSubscription as CreateCustomerSubscriptionDto,
+      )
+      res.status(201).send(newCustomerSubscription)
+    } catch (error: ValidationError | unknown) {
+      res.status(400).send({
+        type: 'Validation error',
+        message: `${(error as ValidationError).errors?.[0]?.message}`,
+      })
     }
   }
 
   async updateSubscription(req: Request, res: Response) {
-    const customerSubscriptionDto: CustomerSubscriptionDto =
-      CustomerSubscriptionDto.fromRequest(req.body)
+    const updateCustomerSubscriptionDto: UpdateCustomerSubscriptionDto =
+      UpdateCustomerSubscriptionDto.fromRequest(req.body)
 
     const hasErrors: ClassValidationError[] | null =
-      await CustomerSubscriptionDto.hasErrors(customerSubscriptionDto)
+      await UpdateCustomerSubscriptionDto.hasErrors(
+        updateCustomerSubscriptionDto,
+      )
 
     if (hasErrors instanceof Array && hasErrors.length > 0) {
-      res.status(400).send({
+      return res.status(400).send({
         type: 'Invalid attribute(s)',
         message: `${(hasErrors as ClassValidationError[]).map((e) => e.property)}`,
       })
-    } else {
-      try {
-        await this.repository.update(req.body)
-        res.status(200).send(req.body)
-      } catch (error) {
-        res.status(404).send({
-          type: 'Validation error',
-          message: `${(error as ValidationError).errors?.[0]?.message}`,
-        })
-      }
+    }
+    try {
+      await this.repository.update(req.body)
+      res.status(200).send(req.body)
+    } catch (error) {
+      res.status(404).send({
+        type: 'Validation error',
+        message: `${(error as ValidationError).errors?.[0]?.message}`,
+      })
     }
   }
 

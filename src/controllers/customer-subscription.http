@@ -13,9 +13,9 @@ POST http://localhost:3001/customer-subscription
 content-type: application/json
 
 {
-    "customerId": "2c05fdda-f466-4f5d-b773-7d836ac542d4",
-    "startDate": "2024-10-01",
-    "endDate": "2024-12-31"
+    "customerId": "331edea8-e003-4264-84c1-f023d561c7a4",
+    "startDate": "2025-01-01",
+    "endDate": "2025-03-31"
 }
 
 

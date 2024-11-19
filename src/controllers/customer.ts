@@ -1,9 +1,9 @@
+import { ValidationError as ClassValidationError } from 'class-validator'
 import { Request, Response } from 'express'
+import { ValidationError } from 'sequelize'
+import { Inject, Service } from 'typedi'
 import { CreateCustomerDto, UpdateCustomerDto } from '../models/customer.dto'
 import { CustomerRepository } from '../repositories/customer'
-import { Inject, Service } from 'typedi'
-import { ValidationError as ClassValidationError } from 'class-validator'
-import { ValidationError } from 'sequelize'
 
 @Service()
 export class CustomerController {
@@ -22,13 +22,12 @@ export class CustomerController {
     const customer = await this.repository.get(id)
 
     if (!customer) {
-      res.status(404).send({
+      return res.status(404).send({
         type: 'Not found',
         message: `Customer with id ${id} not found`,
       })
-    } else {
-      res.status(200).send(customer)
     }
+    res.status(200).send(customer)
   }
 
   async create(req: Request, res: Response) {
@@ -39,20 +38,19 @@ export class CustomerController {
       await CreateCustomerDto.hasErrors(createCustomerDto)
 
     if (hasErrors instanceof Array && hasErrors.length > 0) {
-      res.status(400).send({
+      return res.status(400).send({
         type: 'Invalid attribute(s)',
         message: `${(hasErrors as ClassValidationError[]).map((e) => e.property)}`,
       })
-    } else {
-      try {
-        const customer = await this.repository.create(createCustomerDto)
-        res.status(201).send(customer)
-      } catch (error: Error | unknown) {
-        res.status(400).send({
-          type: 'Validation error',
-          message: `${(error as ValidationError).errors?.[0]?.message}`,
-        })
-      }
+    }
+    try {
+      const customer = await this.repository.create(createCustomerDto)
+      res.status(201).send(customer)
+    } catch (error: Error | unknown) {
+      res.status(400).send({
+        type: 'Validation error',
+        message: `${(error as ValidationError).errors?.[0]?.message}`,
+      })
     }
   }
 

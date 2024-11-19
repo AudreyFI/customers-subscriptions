@@ -7,8 +7,8 @@ import {
 import { SubscriptionStatus } from '../domain/customer-subscription/subscription-state'
 import {
   CreateCustomerSubscriptionDto,
-  CustomerSubscriptionDto,
   CustomerSubscription as CustomerSubscriptionInterface,
+  UpdateCustomerSubscriptionDto,
 } from '../models/customer-subscription.dto'
 import { customerSubscription } from '../models/customer-subscription.model'
 import { customer } from '../models/customer.model'
@@ -55,7 +55,7 @@ export class CustomerSubscriptionRepository
     )) as unknown as CustomerSubscriptionInterface
   }
 
-  async update(updateCustomerSubscriptionDto: CustomerSubscriptionDto) {
+  async update(updateCustomerSubscriptionDto: UpdateCustomerSubscriptionDto) {
     const existingCustomerSubscription = await customerSubscription.findOne({
       where: {
         customerId: updateCustomerSubscriptionDto.customerId,
@@ -71,7 +71,7 @@ export class CustomerSubscriptionRepository
         subscriptionId: updateCustomerSubscriptionDto.subscriptionId,
       },
     })
-    return updateCustomerSubscriptionDto as unknown as CustomerSubscriptionDto
+    return updateCustomerSubscriptionDto as unknown as UpdateCustomerSubscriptionDto
   }
 
   async delete(): Promise<never> {

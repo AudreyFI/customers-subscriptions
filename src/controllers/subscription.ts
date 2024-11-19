@@ -19,15 +19,12 @@ export class SubscriptionController {
     const id = req.params.id
     const subscription = await this.repository.get(id)
     if (!subscription) {
-      res
-        .status(404)
-        .send({
-          type: 'Not found',
-          message: `Subscription with id ${id} not found`,
-        })
-    } else {
-      res.status(200).send(subscription)
+      return res.status(404).send({
+        type: 'Not found',
+        message: `Subscription with id ${id} not found`,
+      })
     }
+    res.status(200).send(subscription)
   }
 
   async create(req: Request, res: Response) {
@@ -37,33 +34,30 @@ export class SubscriptionController {
       await SubscriptionDto.hasErrors(createSubscriptionDto as SubscriptionDto)
 
     if (hasErrors instanceof Array && hasErrors.length > 0) {
-      res.status(400).send({
+      return res.status(400).send({
         type: 'Invalid attribute(s)',
         message: `${(hasErrors as ClassValidationError[]).map((e) => e.property)}`,
       })
-    } else {
-      // Check if there's already a combo startDate/endDate
-      const existingSubscription =
-        await this.repository.getByStartDateAndEndDate(
-          createSubscriptionDto.startDate as string,
-          createSubscriptionDto.endDate as string,
-        )
-      if (existingSubscription) {
-        res.status(409).send({
-          type: 'Invalid attribute(s)',
-          message: `Subscription with start date ${createSubscriptionDto.startDate} and end date ${createSubscriptionDto.endDate} already exists`,
-        })
-      } else {
-        try {
-          const body = await this.repository.create(req.body)
-          res.status(201).send(body)
-        } catch (error: ValidationError | unknown) {
-          res.status(404).send({
-            type: `Validation error`,
-            message: `${(error as ValidationError).errors?.[0]?.message}`,
-          })
-        }
-      }
+    }
+    // Check if there's already a combo startDate/endDate
+    const existingSubscription = await this.repository.getByStartDateAndEndDate(
+      createSubscriptionDto.startDate as string,
+      createSubscriptionDto.endDate as string,
+    )
+    if (existingSubscription) {
+      return res.status(409).send({
+        type: 'Invalid attribute(s)',
+        message: `Subscription with start date ${createSubscriptionDto.startDate} and end date ${createSubscriptionDto.endDate} already exists`,
+      })
+    }
+    try {
+      const body = await this.repository.create(req.body)
+      res.status(201).send(body)
+    } catch (error: ValidationError | unknown) {
+      res.status(404).send({
+        type: `Validation error`,
+        message: `${(error as ValidationError).errors?.[0]?.message}`,
+      })
     }
   }
 
