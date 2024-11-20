@@ -19,7 +19,7 @@ You'll need to install Docker to launch this project locally
 
 ```bash
 mkdir data
-sudo rm -r data/*
+sudo chmod - R 777 data
 sudo chown $USER data
 docker compose build
 docker compose up -d
@@ -37,6 +37,8 @@ EMAIL_SENDER=CHANGEME
 SMTP_HOST=CHANGEME
 SMTP_USER=CHANGEME
 SMTP_PASSWORD=CHANGEME
+FRONTEND_URL=CHANGEME
+FRONTEND_NETWORK_URL=CHANGEME
 ```
 
 I use mailtrap as an Email Delivery Platform https://mailtrap.io/
