@@ -5,6 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "start": "nodemon --ext ts && ts-node src/index.ts",
+    "prod": "tsc && node dist/index.js",
     "build": "tsc",
     "lint": "npx eslint src/**",
     "test": "jest"

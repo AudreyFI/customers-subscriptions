@@ -37,7 +37,7 @@ services:
 
   app:
     build:
-      dockerfile: ./Dockerfile.dev
+      dockerfile: ./Dockerfile.prod
     restart: unless-stopped
     ports:
       - 3001:3001

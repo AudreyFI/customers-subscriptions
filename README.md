@@ -45,7 +45,7 @@ I use mailtrap as an Email Delivery Platform https://mailtrap.io/
 
 ## Database backup and restore
 
-A docker container named `backup` is doing backups everydays and writes a file here /backup/dump.sql. To restore the database (with the correct dump name) :
+A docker container named `backup` is doing backups everydays and writes a file here /backup/dump.sql. It also cleans the old files to keep only 2. To restore the database (with the correct dump name) :
 
 ```bash
 docker cp backup/2024-07-14-15-03-39.dump db:test.dump
