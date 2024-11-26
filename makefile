@@ -1,4 +1,4 @@
-build-arm:
+build:
 	@echo "Zip all files"
-	zip build-arm.zip package.json package-lock.json .env Dockerfile.db Dockerfile.prod docker-compose-arm.yml tsconfig.json
-	zip -r build-arm.zip src
+	zip build-back.zip package.json package-lock.json .env Dockerfile.db Dockerfile.prod docker-compose-arm.yml tsconfig.json
+	zip -r build-back.zip src
