@@ -45,9 +45,16 @@ I use mailtrap as an Email Delivery Platform https://mailtrap.io/
 
 ## Database backup and restore
 
-A docker container named `backup` is doing backups everydays and writes a file here /backup/dump.sql. It also cleans the old files to keep only 2. To restore the database (with the correct dump name) :
+A docker container named `backup` is doing backups everydays and writes a file here /backup. It also cleans the old files to keep only 2. To restore the database (with the correct dump name. And be sure you created a dumps folder inside your db container) :
 
 ```bash
-docker cp backup/2024-07-14-15-03-39.dump db:test.dump
-docker exec -it db bash -c 'pg_restore -c --user <USER> --dbname <DBNAME> /test.dump'
+docker cp backup/2024-07-14-15-03-39.dump db:dumps/restore.dump
+docker exec -it db bash -c 'pg_restore -c --user <USER> --dbname <DBNAME> dumps/restore.dump'
+docker exec -it db bash -c 'rm dumps/restore.dump'
+```
+
+You can use the /send-dumps.py script to send the generated backup to the email address you want and execute it with the cron job, for example (to run every week):
+
+```bash
+0 0 * * 0 python send-dumps.py
 ```

@@ -37,4 +37,3 @@ docker-compose-api.yml
 backup
 Dockerfile.test-prod
 build*.zip
-*-dump.sh
