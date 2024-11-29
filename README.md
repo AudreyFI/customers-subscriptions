@@ -42,8 +42,6 @@ FRONTEND_URL=CHANGEME
 FRONTEND_NETWORK_URL=CHANGEME
 ```
 
-I use mailtrap as an Email Delivery Platform https://mailtrap.io/
-
 ## Database backup and restore
 
 A docker container named `backup` is doing backups everydays and writes a file here /backup. It also cleans the old files to keep only 2. To restore the database (with the correct dump name. And be sure you created a dumps folder inside your db container) :
@@ -58,4 +56,15 @@ You can use the /send-dumps.py script to send the generated backup to the email 
 
 ```bash
 0 0 * * 0 python send-dumps.py
+```
+
+## Expiration notifications
+
+The endpoint [customer-subscription/check-validity](http://localhost:3001/customer-subscription/check-validity) is looking for invalid subscriptions : end date between today - 15 and today + 15.
+It calls a state machine to update the subscription's state and send an email to the customer.
+
+You can also use a cron to call this endpoint everyday (at eight) :
+
+```bash
+0 8 * * * curl --silent http://localhost:3001/customer-subscription/check-validity
 ```
