@@ -1,6 +1,6 @@
 import { Inject, Service } from 'typedi'
 import { InvalidCustomerSubscription } from '../domain/customer-subscription/customer-subscription-data'
-import { SubscriptionStatus } from '../domain/customer-subscription/subscription-state'
+import { SubscriptionStatus } from '../domain/subscription/subscription-status'
 import { EmailTemplate } from '../email/email-library.interface'
 import { NodemailerLibrary } from '../email/nodemailer'
 import { EmailParam } from '../email/templates/email-param'

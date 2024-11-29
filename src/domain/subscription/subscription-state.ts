@@ -4,13 +4,7 @@ import { expired } from '../../email/templates/expired'
 import { lateExpired } from '../../email/templates/late-expired'
 import { soonToExpire } from '../../email/templates/soon-to-expire'
 import { date15daysAfter, today } from '../../helpers/date'
-
-export type SubscriptionStatus =
-  | 'started'
-  | 'expiresSoon'
-  | 'expired'
-  | 'lateExpired'
-  | 'ended'
+import { SubscriptionStatus } from './subscription-status'
 
 type SubscriptionAction = 'sendAlert' | 'terminate'
 
@@ -54,7 +48,7 @@ export const shouldTriggerProcess = (
   state: SubscriptionStatus | undefined,
 ) => {
   return (
-    state === 'started' ||
+    state === 'started' || // because we only retrieve the subscriptionEndDate that are greater than today - 15 days
     (state === 'expiresSoon' && subscriptionEndDate === today) ||
     (state === 'expired' &&
       subscriptionEndDate &&

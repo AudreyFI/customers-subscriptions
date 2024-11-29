@@ -4,7 +4,7 @@ import {
   CustomerSubscriptionDataModel,
   InvalidCustomerSubscription,
 } from '../domain/customer-subscription/customer-subscription-data'
-import { SubscriptionStatus } from '../domain/customer-subscription/subscription-state'
+import { SubscriptionStatus } from '../domain/subscription/subscription-status'
 import {
   CreateCustomerSubscriptionDto,
   CustomerSubscription as CustomerSubscriptionInterface,

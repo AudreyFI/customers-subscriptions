@@ -8,7 +8,7 @@ import {
   ValidationError,
 } from 'class-validator'
 import { hasErrors, transform } from '../core/validator'
-import { SubscriptionStatus } from '../domain/customer-subscription/subscription-state'
+import { SubscriptionStatus } from '../domain/subscription/subscription-status'
 
 export interface CustomerSubscription {
   customerId: string

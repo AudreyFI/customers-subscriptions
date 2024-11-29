@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer'
-import { EmailLibrary, EmailTemplate } from './email-library.interface'
+import Mail from 'nodemailer/lib/mailer'
 import { Service } from 'typedi'
+import { EmailLibrary, EmailTemplate } from './email-library.interface'
 
 @Service()
 export class NodemailerLibrary implements EmailLibrary {
@@ -15,11 +16,12 @@ export class NodemailerLibrary implements EmailLibrary {
   })
 
   sendEmail(content: { email: string; template: EmailTemplate }) {
-    const emailOptions = {
+    const emailOptions: Mail.Options = {
       from: this.from,
       to: content.email,
       subject: content.template.subject,
       html: content.template.html,
+      cc: process.env.EMAIL_CC,
     }
     this.transporter.sendMail(emailOptions, (error, info) => {
       if (error) {

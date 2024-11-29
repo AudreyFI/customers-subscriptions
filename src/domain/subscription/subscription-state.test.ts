@@ -1,4 +1,4 @@
-import { shouldTriggerProcess, processState } from './subscription-state'
+import { processState, shouldTriggerProcess } from './subscription-state'
 
 describe('shouldTriggerProcess', () => {
   it('should return false if subscriptionEndDate is udefined and state is undefined', () => {

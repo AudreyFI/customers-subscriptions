@@ -1,4 +1,4 @@
-import { SubscriptionStatus } from './subscription-state'
+import { SubscriptionStatus } from '../subscription/subscription-status'
 
 export type CustomerSubscriptionDataModel = {
   id?: string

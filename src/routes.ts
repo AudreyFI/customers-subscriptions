@@ -6,7 +6,7 @@ import { SubscriptionController } from './controllers/subscription'
 import {
   processState,
   shouldTriggerProcess,
-} from './domain/customer-subscription/subscription-state'
+} from './domain/subscription/subscription-state'
 
 const customerController = Container.get(CustomerController)
 const subscriptionController = Container.get(SubscriptionController)
