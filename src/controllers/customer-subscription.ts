@@ -183,12 +183,11 @@ export class CustomerSubscriptionController {
           shouldTriggerProcess,
           invalids,
         )
-        res.status(200).send(result)
-      } else {
-        res.status(204).send()
+        return res.status(200).send(result)
       }
+      return res.status(204).send()
     } catch (error) {
-      res.status(400).send({
+      return res.status(400).send({
         type: 'Validation error',
         message: error,
       })

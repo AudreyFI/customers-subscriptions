@@ -122,7 +122,7 @@ export class CustomerSubscriptionRepository
       include: {
         model: subscription,
         where: {
-          startDate: {
+          endDate: {
             [Op.gt]: endDate,
           },
         },

@@ -1,3 +1,4 @@
+import { date15daysAfter, date15daysBefore, today } from '../../helpers/date'
 import { processState, shouldTriggerProcess } from './subscription-state'
 
 describe('shouldTriggerProcess', () => {
@@ -34,6 +35,21 @@ describe('shouldTriggerProcess', () => {
   it('should return true if state is expired and there is a subscriptionEndDate but it is not today + 15', () => {
     const result = shouldTriggerProcess('2022-01-01', 'expired')
     expect(result).toBe(false)
+  })
+
+  it('should return true if state is started and enddate expires soon', () => {
+    const result = shouldTriggerProcess(date15daysAfter(), 'started')
+    expect(result).toBe(true)
+  })
+
+  it('should return false if state is expiresSoon and endDate is today', () => {
+    const result = shouldTriggerProcess(today, 'expiresSoon')
+    expect(result).toBe(true)
+  })
+
+  it('should return false if state is expired and there is no subscriptionEndDate', () => {
+    const result = shouldTriggerProcess(date15daysBefore, 'expired')
+    expect(result).toBe(true)
   })
 })
 

@@ -39,7 +39,7 @@ const stateMachine: StateMachine = {
     },
     terminate: { nextState: 'ended' },
   },
-  lateExpired: {},
+  lateExpired: { terminate: { nextState: 'ended' } },
   ended: {},
 }
 

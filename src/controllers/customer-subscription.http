@@ -35,6 +35,6 @@ DELETE http://localhost:3001/customer-subscription/?customerId=2c05fdda-f466-4f5
 content-type: application/json
 
 
-### CHECK CUSTOMER SUBSCRIPTION VALIDITY
+### CHECK CUSTOMER SUBSCRIPTION VALIDITY AND NOTIFY
 GET http://localhost:3001/customer-subscription/check-validity
 content-type: application/json

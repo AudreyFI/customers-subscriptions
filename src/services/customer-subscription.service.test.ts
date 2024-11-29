@@ -2,6 +2,7 @@ import 'reflect-metadata'
 import { Container } from 'typedi'
 import { InvalidCustomerSubscription } from '../domain/customer-subscription/customer-subscription-data'
 import { NodemailerLibrary } from '../email/nodemailer'
+import { date15daysAfter, date15daysBefore, today } from '../helpers/date'
 import { CustomerSubscriptionRepository } from '../repositories/customer-subscription'
 import { CustomerSubscriptionService } from './customer-subscription.service'
 
@@ -12,18 +13,6 @@ describe('CustomerSubscriptionService', () => {
   let service: CustomerSubscriptionService
   let emailService: NodemailerLibrary
   let repository: CustomerSubscriptionRepository
-
-  const soonExpiredEndDate = new Date(
-    new Date().getFullYear(),
-    new Date().getMonth(),
-    new Date().getDate() - 15,
-  )
-  const today = new Date(Date.now())
-  const lateExpiredEndDate = new Date(
-    new Date().getFullYear(),
-    new Date().getMonth(),
-    new Date().getDate() + 15,
-  )
 
   beforeEach(() => {
     Container.reset()
@@ -154,7 +143,7 @@ describe('CustomerSubscriptionService', () => {
           subscription: {
             id: 'sub1',
             startDate: '2023-09-01',
-            endDate: soonExpiredEndDate.toISOString(),
+            endDate: date15daysAfter(),
             status: 'started',
           },
           email: 'test@example.com',
@@ -180,7 +169,7 @@ describe('CustomerSubscriptionService', () => {
       )
 
       expect(shouldTriggerProcess).toHaveBeenCalledWith(
-        soonExpiredEndDate.toISOString(),
+        date15daysAfter(),
         'started',
       )
       expect(processState).toHaveBeenCalledWith('started', false)
@@ -202,7 +191,7 @@ describe('CustomerSubscriptionService', () => {
           subscription: {
             id: 'sub1',
             startDate: '2023-09-01',
-            endDate: soonExpiredEndDate.toISOString(),
+            endDate: date15daysAfter(),
             status: 'started',
           },
           email: 'test@example.com',
@@ -226,7 +215,7 @@ describe('CustomerSubscriptionService', () => {
       )
 
       expect(shouldTriggerProcess).toHaveBeenCalledWith(
-        soonExpiredEndDate.toISOString(),
+        date15daysAfter(),
         'started',
       )
       expect(processState).toHaveBeenCalledWith('started', true)
@@ -245,7 +234,7 @@ describe('CustomerSubscriptionService', () => {
           subscription: {
             id: 'sub1',
             startDate: '2023-09-01',
-            endDate: today.toISOString(),
+            endDate: today,
             status: 'expiresSoon',
           },
           email: 'test@example.com',
@@ -270,10 +259,7 @@ describe('CustomerSubscriptionService', () => {
         invalidSubscriptions,
       )
 
-      expect(shouldTriggerProcess).toHaveBeenCalledWith(
-        today.toISOString(),
-        'expiresSoon',
-      )
+      expect(shouldTriggerProcess).toHaveBeenCalledWith(today, 'expiresSoon')
       expect(processState).toHaveBeenCalledWith('expiresSoon', false)
       expect(emailService.sendEmail).toHaveBeenCalledWith({
         email: 'test@example.com',
@@ -293,7 +279,7 @@ describe('CustomerSubscriptionService', () => {
           subscription: {
             id: 'sub1',
             startDate: '2023-09-01',
-            endDate: lateExpiredEndDate.toISOString(),
+            endDate: date15daysBefore,
             status: 'expired',
           },
           email: 'test@example.com',
@@ -319,7 +305,7 @@ describe('CustomerSubscriptionService', () => {
       )
 
       expect(shouldTriggerProcess).toHaveBeenCalledWith(
-        lateExpiredEndDate.toISOString(),
+        date15daysBefore,
         'expired',
       )
       expect(processState).toHaveBeenCalledWith('expired', false)
