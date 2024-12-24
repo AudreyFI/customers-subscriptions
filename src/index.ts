@@ -8,10 +8,7 @@ import routes from './routes'
 const app = express()
 app.use(
   cors({
-    origin: [
-      process.env.FRONTEND_URL as string,
-      process.env.FRONTEND_NETWORK_URL as string,
-    ],
+    origin: process.env.FRONTEND_URLS?.split(','),
   }),
 )
 app.use(express.json())
