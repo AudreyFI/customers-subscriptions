@@ -227,7 +227,7 @@ describe('CustomerSubscriptionService', () => {
       })
     })
 
-    it('should process invalid subscriptions and send email when subscription expires', async () => {
+    it('should process invalid subscriptions and send email when subscription expires soon', async () => {
       const invalidSubscriptions: InvalidCustomerSubscription[] = [
         {
           customerId: 'customer1',

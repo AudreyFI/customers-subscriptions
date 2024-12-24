@@ -1,4 +1,4 @@
-const toDayOnly = (date: Date) => date.toISOString().split('T')[0]
+export const toDayOnly = (date: Date) => date.toISOString().split('T')[0]
 
 export const date15daysBefore = toDayOnly(
   new Date(new Date().setDate(new Date().getDate() - 15)),
